@@ -1,0 +1,3 @@
+image_path,mask_path
+/path/to/dataset_128/SUBJECT_001/raw.nii.gz,/path/to/dataset_128/SUBJECT_001/training_masks/mask_4_classes.nii.gz
+/path/to/dataset_128/SUBJECT_002/raw.nii.gz,/path/to/dataset_128/SUBJECT_002/training_masks/mask_4_classes.nii.gz

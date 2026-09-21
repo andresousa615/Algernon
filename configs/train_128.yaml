@@ -1,0 +1,17 @@
+# Algernon training configuration (128^3 input).
+
+model: mednext
+input_size: [128, 128, 128]   # (D, H, W) — volumes must be resampled to this size
+out_channels: 5               # background + ears, mouth, nose, eyes
+
+# CSVs with columns image_path, mask_path (see preprocessing/make_splits.py)
+train_path: data/train.csv
+val_path: data/val.csv
+
+# Run directories are created as <base_output>/train_<model>_<lr>_<comment>_<job_id>/
+base_output: results
+
+lr: 5.0e-4        # for batch_size=1 per GPU; double it for every doubling of the global batch
+batch_size: 1     # per GPU
+
+comment: mednext_128

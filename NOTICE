@@ -1,0 +1,27 @@
+Algernon — selective facial anonymisation of head MRI
+Copyright 2026 André Sousa
+
+This product includes software developed by third parties:
+
+1. MedNeXt (https://github.com/MIC-DKFZ/MedNeXt)
+   Copyright 2023 Division of Medical Image Computing, German Cancer Research
+   Center (DKFZ). Licensed under the Apache License 2.0 (see LICENSE-MedNeXt).
+   Files: models/mednext/MedNextV1.py, models/mednext/blocks.py
+
+2. mede — Medical image de-identification (https://pypi.org/project/mede/)
+   Copyright 2025 Lukas Heine & Moritz Rempe. Licensed under the Apache
+   License 2.0 with the Commons Clause restriction (see LICENSE-mede).
+   The following files started as modified copies of, or contain code
+   derived from, the mede training and data pipeline:
+     train.py (training-loop skeleton, EarlyStopping),
+     data/dataset.py (RAS reorientation, DICOM/enhanced-DICOM helpers,
+       dataset and inference-loader skeleton),
+     models/mednext_seg.py, utils/losses.py, utils/validation.py,
+     utils/utilities.py.
+   The Commons Clause forbids selling, renting or commercially exploiting the
+   original mede code without written permission from its authors; that
+   restriction continues to apply to the portions derived from it.
+
+Everything else in this repository (the work-stealing loader, the
+anonymisation officer, the evaluation and profiling tooling, the SLURM
+pipelines) is original work released under the Apache License 2.0 (LICENSE).

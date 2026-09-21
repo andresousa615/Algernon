@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+.venv/
+venv/
+
+# Training / inference outputs (never commit data or checkpoints)
+results/
+logs/
+nsys_profiles/
+torch_compile_cache/
+*.pt
+*.pth
+*.nii
+*.nii.gz
+*.npz
+*.dcm
+
+# Data CSVs point to local paths; only the example is tracked
+data/*.csv
+!data/example.csv
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/

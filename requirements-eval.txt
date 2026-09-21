@@ -1,0 +1,13 @@
+# Optional: 3D rendering, defacing score and re-identification (evaluation/).
+# PyVista needs an OpenGL context (use xvfb-run on headless nodes).
+pyvista>=0.43
+Pillow>=10.0
+# Defacing score (dlib CNN detector). dlib compiles from source; a CUDA build
+# is strongly recommended for the 'cnn' detector.
+face_recognition>=1.3.0
+dlib>=19.24
+# Re-identification (ArcFace/RetinaFace via deepface, TensorFlow backend).
+# Keep it in a separate conda environment from the training stack.
+deepface>=0.0.93
+tf-keras
+opencv-python>=4.8
