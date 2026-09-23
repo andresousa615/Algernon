@@ -1,4 +1,4 @@
-# Algernon — selective facial anonymisation of head MRI
+# Algernon, a selective facial anonymisation of head MRI
 
 Algernon segments four facial structures (**ears, mouth, nose, eyes**) in 3D
 head MRI with a MedNeXt network and anonymises each of them with a dedicated
