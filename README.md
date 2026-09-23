@@ -201,7 +201,6 @@ If you use this code, please cite the dissertation:
 @mastersthesis{sousa2026algernon,
   author = {André Sousa},
   title  = {Algernon, a selective facial anonymisation of head MRI with distributed deep learning},
-  school = {Universidade do Minho},
   year   = {2026}
 }
 ```
