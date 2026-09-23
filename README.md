@@ -17,10 +17,6 @@ raw NIfTI/DICOM ─► RAS + resize 128³ ─► MedNeXt ─► argmax mask ─�
 native resolution ─► AnonymizationOfficer (per region) ─► anonymised NIfTI
 ```
 
-Reference numbers are in [`docs/results/RESULTS.md`](docs/results/RESULTS.md):
-Dice 0.754 on 96 external exams at native resolution, 52 % of anonymised
-renders with no detectable face, rank-1 re-identification 4.3 % (chance 1 %).
-
 ---
 
 ## Repository layout
@@ -205,7 +201,7 @@ If you use this code, please cite the dissertation:
 @mastersthesis{sousa2026algernon,
   author = {André Sousa},
   title  = {Algernon, a selective facial anonymisation of head MRI with distributed deep learning},
-  school = {<Universidade do Minho>},
+  school = {Universidade do Minho},
   year   = {2026}
 }
 ```
