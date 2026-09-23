@@ -172,11 +172,6 @@ pre-schedules the expensive transforms 3:1 so they never cluster on one
 worker. It is a drop-in replacement for the loader in `train.py`; see the
 module docstring for the protocol.
 
-## Pretrained weights
-
-Weights are not distributed with the repository yet. A download link will be
-added here once the data-use conditions of the training sets are settled.
-
 ## Citation
 
 If you use this code, please cite the dissertation:
@@ -184,8 +179,8 @@ If you use this code, please cite the dissertation:
 ```
 @mastersthesis{sousa2026algernon,
   author = {André Sousa},
-  title  = {Algernon: selective facial anonymisation of head MRI with distributed deep learning},
-  school = {<university>},
+  title  = {Algernon, a selective facial anonymisation of head MRI with distributed deep learning},
+  school = {<Universidade do Minho>},
   year   = {2026}
 }
 ```
