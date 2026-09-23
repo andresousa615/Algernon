@@ -1,4 +1,4 @@
-# Algernon — selective facial anonymisation of head MRI
+# Algernon, a selective facial anonymisation of head MRI
 
 Algernon segments four facial structures (**ears, mouth, nose, eyes**) in 3D
 head MRI with a MedNeXt network and anonymises each of them with a dedicated
@@ -27,6 +27,7 @@ renders with no detectable face, rank-1 re-identification 4.3 % (chance 1 %).
 
 | Path | Content |
 |---|---|
+| `run_pipeline.sh` | Runs every stage end to end on one machine (training → inference → evaluation) |
 | `train.py` | DDP training (AMP, `torch.compile`, warm-up + cosine LR, snapshots, optional profiling) |
 | `inference.py` | DDP inference, Dice at network and native resolution, anonymisation, timing/MFU |
 | `configs/train_128.yaml` | Model, input size, paths and hyper-parameters |
@@ -91,7 +92,31 @@ python preprocessing/build_external_csv.py --root /path/external --out data/exte
 Each CSV has the columns `image_path,mask_path` (see `data/example.csv`);
 `mask_path` may be empty for inference-only sets.
 
-### 2. Training
+### 2. Everything at once
+
+Once the data is prepared, `run_pipeline.sh` chains every remaining stage —
+training, curves, inference + anonymisation, renders and defacing score — on
+the GPUs of the current machine:
+
+```bash
+./run_pipeline.sh                            # all stages, every visible GPU
+./run_pipeline.sh --gpus 2 --epochs 50
+./run_pipeline.sh --preserve-regions eyes    # keep the eyes intact
+./run_pipeline.sh --skip-eval                # stop after inference
+./run_pipeline.sh --test-csv data/test.csv --test-csv data/external.csv
+./run_pipeline.sh --help                     # all options
+```
+
+It honours `CUDA_VISIBLE_DEVICES` when deciding how many processes to launch.
+
+Results land in `results/train_<model>_<lr>_<comment>_<run_id>/`, where
+`<run_id>` is a timestamp unless `--run-id` is given. Re-identification is not
+chained in, because it needs its own environment (see step 5).
+
+For multi-node cluster runs, use `slurm/pipeline_train_eval.sh` instead. The
+stages below are the same steps run individually.
+
+### 3. Training
 
 ```bash
 torchrun --nproc_per_node=2 train.py --config configs/train_128.yaml --epochs 100
@@ -109,7 +134,7 @@ Dice + 0.1·CE loss, FP16 autocast, `torch.compile(mode="max-autotune-no-cudagra
 Augmentation: one spatial transform per sample (affine 75 % / elastic 25 %,
 scheduled by the loader) and bias field / noise / gamma / spike each with p = 0.25.
 
-### 3. Inference and anonymisation
+### 4. Inference and anonymisation
 
 ```bash
 torchrun --nproc_per_node=2 inference.py \
@@ -139,7 +164,7 @@ When some regions are preserved, the cover of each preserved region is
 restored from the original volume at the end; where it overlaps the cover of
 an anonymised region, anonymisation wins.
 
-### 4. Privacy evaluation (optional)
+### 5. Privacy evaluation (optional)
 
 ```bash
 # 2D renders of original/anonymised pairs (PyVista; xvfb-run on headless nodes)
@@ -153,7 +178,7 @@ python evaluation/defacing_score_ddp.py --dir_pairs results/<run>/pairs_2d --out
 python evaluation/reidentification.py --pairs_dir results/<run>/pairs_2d --out results/<run>/reidentification.txt
 ```
 
-### 5. Profiling (optional)
+### 6. Profiling (optional)
 
 `train.py --profile` enables the `TrainingProfiler` (per-phase time and VRAM,
 NCCL overhead, loader starvation, Chrome trace with `--profile-epochs N`) and
@@ -172,11 +197,6 @@ pre-schedules the expensive transforms 3:1 so they never cluster on one
 worker. It is a drop-in replacement for the loader in `train.py`; see the
 module docstring for the protocol.
 
-## Pretrained weights
-
-Weights are not distributed with the repository yet. A download link will be
-added here once the data-use conditions of the training sets are settled.
-
 ## Citation
 
 If you use this code, please cite the dissertation:
@@ -184,8 +204,8 @@ If you use this code, please cite the dissertation:
 ```
 @mastersthesis{sousa2026algernon,
   author = {André Sousa},
-  title  = {Algernon: selective facial anonymisation of head MRI with distributed deep learning},
-  school = {<university>},
+  title  = {Algernon, a selective facial anonymisation of head MRI with distributed deep learning},
+  school = {<Universidade do Minho>},
   year   = {2026}
 }
 ```

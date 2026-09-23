@@ -133,7 +133,11 @@ class TrainNetwork:
         self.world_size = int(os.environ.get("WORLD_SIZE", "1"))
         self.device = torch.device(f"cuda:{self.local_rank}")
 
-        self.current_job_id = os.environ.get("SLURM_JOB_ID", "standalone")
+        # Run identifier, used to name the output directory and the snapshot.
+        # ALGERNON_RUN_ID lets run_pipeline.sh pick the id so it can find the
+        # results afterwards; under SLURM the job id is used automatically.
+        self.current_job_id = (os.environ.get("ALGERNON_RUN_ID")
+                               or os.environ.get("SLURM_JOB_ID", "standalone"))
         self.train_path: str = config["train_path"]
         self.val_path: str = config["val_path"]
         self.base_output = Path(config["base_output"])
